@@ -102,6 +102,15 @@ def extract_include_dirs(compile_command):
                 if opt == "-B":
                     include_dir = os.path.join(include_dir, "include")
                 header_search_path.append(include_dir)
+            elif arguments[i] == "--options-file":
+                i += 1
+                rsp_file = arguments[i]
+                rsp_file = os.path.join(compile_command.directory, rsp_file)
+                if os.path.isfile(rsp_file):
+                    with open(rsp_file) as f:
+                        lines = f.readlines()
+                    for line in lines:
+                        arguments.extend(line.split())
         i += 1
     return [
         os.path.join(compile_command.directory, p) for p in header_search_path
